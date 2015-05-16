@@ -17,8 +17,9 @@ enyo.kind({
 		this.endTime[inIndex] = new Date().getTime() + inInterval*1000;
 		this.callbacks[inIndex] = inCallback;
 		this.doUpdate(inInterval, inIndex);
-		if (! this.handle)
+		if (! this.handle) {
 			this.handle = window.setInterval(enyo.bind(this, "update"), 500);
+		}
 	},
 	stop: function(inIndex) {
 		this.endTime[inIndex] = undefined;

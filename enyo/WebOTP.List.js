@@ -20,14 +20,17 @@ enyo.kind({
 				{kind: "SwipeableItem", name: "item", layoutKind: "HFlexLayout", onclick: "itemClicked", onConfirm: "deleteItem", components: [
 					{kind: "WebOTP.ProgressImage", name: "icon", content: "", size: 80},
 					{kind: enyo.VFlexBox, flex: 1, components: [
+						{name: "pin", content: "------", className: "pinDisplay", flex: 1},
 						{kind: enyo.HFlexBox, components: [
-							{name: "pin", content: "------", className: "pinDisplay", flex: 1},
+							{kind: "enyo.VFlexBox", flex: 1, components: [
+								{name: "issuer", className: "enyo-item-secondary"},
+								{name: "description", className: "enyo-item-ternary"},
+							]},
 							{kind: "enyo.VFlexBox", components: [
+								{kind: "Spacer", flex: 1},
 								{kind: "IconButton", icon: "images/btn_edit.png", onclick: "editClicked"},
 							]},
 						]},
-						{name: "issuer", className: "enyo-item-secondary"},
-						{name: "description", className: "enyo-item-ternary"},
 					]},
 				]}
 			]} 
@@ -65,15 +68,23 @@ enyo.kind({
 		inEvent.stopPropagation();
 	},
 	itemClicked: function(inSender, inEvent) {
-		var service = this.services[inEvent.rowIndex];
-		var timeout = 60;
+		/* workaround bug for not-giving me correct row index  */
+		//var inIndex = inEvent.rowIndex;
+		var inIndex = this.$.list.fetchRowIndexByNode(inEvent.toElement);
+		var service = this.services[inIndex];
 		var swap_timeout = service.interval - (Math.floor(new Date().getTime() / 1000) % service.interval);
-		this.$.icon.initProgress(inEvent.rowIndex, swap_timeout, timeout);
-		this.showNewPin(null, inEvent.rowIndex);
-		this.$.timer.start(inEvent.rowIndex, timeout, enyo.bind(this, "hidePin"));
+		var timeout = parseInt(service.interval)+swap_timeout;
+
+		/* make sure the init goes with correct row! */
+		this.$.list.controlsToRow(inIndex);
+		this.$.icon.initProgress(inIndex, swap_timeout, timeout);
+
+		this.showNewPin(inIndex);
 		if (service.type == 0){
-			this.$.pinTimer.start(inEvent.rowIndex, swap_timeout, enyo.bind(this, "showSecondPin"));
+			this.$.pinTimer.start(inIndex, swap_timeout, enyo.bind(this, "showSecondPin"));
+			// do inner circle first, since the outer triggers redraw
 		}
+		this.$.timer.start(inIndex, timeout, enyo.bind(this, "hidePin"));
 		inEvent.stopPropagation();
 	},
 	updateProgress: function(inSender, inRemains, inIndex) {
@@ -93,9 +104,9 @@ enyo.kind({
 		var remain_timeout = Math.floor(this.$.timer.getRemaining(inIndex)/1000);
 		this.$.icon.setInnerStart(inIndex, remain_timeout);
 		this.$.pinTimer.start(inIndex, remain_timeout, enyo.bind(this, "hidePin"));
-		this.showNewPin(inSender, inIndex);
+		this.showNewPin(inIndex);
 	},
-	showNewPin: function(inSender, inIndex) {
+	showNewPin: function(inIndex) {
 		this.$.list.controlsToRow(inIndex);
 		var service = this.services[inIndex];
 		var pin = this.$.crypto.getPIN(service);

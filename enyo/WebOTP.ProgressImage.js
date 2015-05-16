@@ -18,28 +18,33 @@ enyo.kind({
 		this.ctx = [];
 		this.inIndex = 0;
 	},
-	srcChanged: function(inOldValue) {
-		if (this.src != ""){
-			this.setStyle("background-image: url('" + this.src+"')");
-		} else {
-			this.setStyle(""); // fallbacks to default CSS
+	rendered: function() {
+		this.inherited(arguments);
+		if (this.hasNode()) {
+			var canvas = document.createElement('canvas');
+			this.node.appendChild(canvas);
 		}
 	},
 	initProgress: function(inIndex, innerInitial, outerInitial) {
 		if (this.canvas[inIndex] == undefined) {
-			this.canvas[inIndex] = document.createElement('canvas');
+			if (this.node.firstChild) {
+				this.canvas[inIndex] = this.node.firstChild;
+			} else {
+				this.canvas[inIndex] = document.createElement('canvas');
+				this.node.appendChild(this.canvas[inIndex]);
+			}
+//			this.canvas[inIndex] = this.node.firstChild;
 			if (typeof(G_vmlCanvasManager) !== 'undefined') {
 				G_vmlCanvasManager.initElement(this.canvas[inIndex]);
 			}
 			this.ctx[inIndex] = this.canvas[inIndex].getContext('2d');
 			this.canvas[inIndex].width = this.canvas[inIndex].height = this.size;
 
-			this.node.appendChild(this.canvas[inIndex]);
-			this.ctx[inIndex].translate(this.size / 2, this.size / 2); // change center
-			this.ctx[inIndex].rotate((-1 / 2 ) * Math.PI); // rotate -90 deg
+//			this.ctx[inIndex].translate(this.size / 2, this.size / 2); // change center
+//			this.ctx[inIndex].rotate((-1 / 2 ) * Math.PI); // rotate -90 deg
 		}
 
-		this.radius = (this.size - this.lineWidth) / 2;
+		this.radius = (this.size - this.lineWidth - 10) / 2;
 
 		this.innerInitial[inIndex] = innerInitial;
 		this.outerInitial[inIndex] = outerInitial;
@@ -56,7 +61,7 @@ enyo.kind({
 			return;
 		percent = Math.min(Math.max(0, percent || 1), 1);
 		this.ctx[this.inIndex].beginPath();
-		this.ctx[this.inIndex].arc(0, 0, radius, 0, Math.PI * 2 * percent, true);
+		this.ctx[this.inIndex].arc(this.size/2, this.size/2, radius, 1.5 * Math.PI, (Math.PI * 2 * percent + 1.5 * Math.PI), true);
 		if (stroke != null) {
 			this.ctx[this.inIndex].strokeStyle = stroke;
 			this.ctx[this.inIndex].lineCap = 'round'; // butt, round or square
@@ -64,7 +69,7 @@ enyo.kind({
 			this.ctx[this.inIndex].stroke();
 		}
 		if (fill != null) {
-			this.ctx[this.inIndex].lineTo(0,0);
+			this.ctx[this.inIndex].lineTo(this.size/2,this.size/2);
 			this.ctx[this.inIndex].fillStyle = fill;
 			this.ctx[this.inIndex].fill();
 		}
@@ -88,6 +93,13 @@ enyo.kind({
 	},
 	destroyProgress: function(inIndex) {
 		this.ctx[inIndex].clearRect(-this.size, -this.size, 2*this.size, 2*this.size);
-	}
+	},
+	srcChanged: function(inOldValue) {
+		if (this.src != ""){
+			this.setStyle("background-image: url('" + this.src+"')");
+		} else {
+			this.setStyle(""); // fallbacks to default CSS
+		}
+	},
 });
 
