@@ -1,0 +1,24 @@
+.jlabel {
+	text-align: right;
+	color: #1879cd;
+	font-size: .7rem;
+	text-transform: uppercase;
+}
+
+.pinDisplay {
+	font-size: 35px;
+	text-align: center;
+	padding: 5px;
+	letter-spacing: 3px;
+}
+
+.progressImage {
+	margin-right: 10px;
+	width: 80px;
+	height: 80px;
+	background: transparent url('../images/80.png') center center no-repeat;
+}
+
+.progressImage canvas {
+	opacity: .8;
+}

@@ -1,0 +1,10 @@
+{
+	"id": "com.dta3.jakuje.webotp",
+	"version": "1.0.0",
+	"vendor": "Jakuje",
+	"type": "web",
+        "icon": "images/58.png",
+	"main": "index.html",
+	"title": "WebOTP",
+	"uiRevision": "2"
+}
