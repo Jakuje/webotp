@@ -72,11 +72,7 @@ enyo.kind({
 			try {
 				this.services = enyo.json.parse(enyo.getCookie(STORE_COOKIE));
 			} catch(err) {
-				this.services = [
-					{"issuer":"jakuje@gmail.com", "description":"github","icon":"images/github.png", "secret":"12345678","type":0,"digits":6,"algorithm":"SHA1","interval":"30","counter":"0"},
-					{"issuer":"jakuje@gmail.com", "description":"google","icon":"images/g80.png", "secret":"12345678","type":0,"digits":6,"algorithm":"SHA1","interval":"15","counter":"0"},
-					{"issuer":"jakuje@dta3.com", "description":"abcdefghijklmnop","icon":"images/80.png", "secret":"abcdefghijklmnop","type":0,"digits":6,"algorithm":"SHA1","interval":"30","counter":"0"}
-				];
+				this.services = [];
 				this.storeServices();
 			}
 		}
