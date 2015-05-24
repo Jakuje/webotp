@@ -5,7 +5,8 @@ enyo.kind({
 	kind: enyo.VFlexBox,
 	components: [
 		{kind: "AppMenu", components: [
-			{caption: "About", onclick: "showCredits"}
+			{kind: "EditMenu"},
+			{caption: "About", onclick: "showHelp"}
 		]},
 		{name: "pane", kind: "Pane", flex: 1, onSelectView: "viewSelected", components: [
 			{name: "list", className: "enyo-bg", kind: "WebOTP.List",
@@ -13,7 +14,8 @@ enyo.kind({
 				onDelete: "deleteService", onStore: "storeServices"},
 			{name: "detail", className: "enyo-bg", kind: "WebOTP.Detail",
 				onAddService: "addService", onBack: "goBack",
-				onEditService: "serviceEdited"}
+				onEditService: "serviceEdited"},
+			{name: "help", className: "enyo-bg", kind: "WebOTP.Help", onBack: "goBack"}
 		]},
 		{kind: enyo.ApplicationEvents,
 			onBack: "goBack",
@@ -30,6 +32,9 @@ enyo.kind({
 			this.$.detail.cleanup();
 		} else if (inView == this.$.detail) {
 		}
+	},
+	showHelp: function(inSender) {
+		this.$.pane.selectViewByName("help");
 	},
 	goBack: function(inSender, inEvent) {
 		this.$.pane.back(inEvent);

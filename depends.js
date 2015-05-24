@@ -5,6 +5,7 @@ enyo.depends(
   "enyo/WebOTP.ProgressTimer.js",
   "enyo/WebOTP.ProgressImage.js",
   "enyo/WebOTP.Crypto.js",
+  "enyo/WebOTP.Help.js",
   "enyo/lib/hmac-md5.js",
   "enyo/lib/hmac-sha1.js",
   "enyo/lib/hmac-sha256.js",
