@@ -121,14 +121,12 @@ enyo.kind({
 		this.cleanup(); // security!
 		this.goBack();
 	},
-	create: function() {
-		this.inherited(arguments);
-	},
 	addNew: function() {
 		this.$.secret_block.show();
 		this.$.advanced.show();
 		this.$.submit.setCaption("Add");
 		this.$.submit.onclick = "addToken";
+		this.validate();
 	},
 	edit: function(inServiceId) {
 		this.serviceId = inServiceId;
