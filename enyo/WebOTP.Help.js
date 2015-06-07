@@ -44,7 +44,7 @@ enyo.kind({
 		this.$.browser.call({"target": "http://forums.webosnation.com/webos-apps-games/329648-freeotp.html"});
 	},
 	showEmail: function(){
-		this.$.browser.call({"target": "mailto: jakuje@gmail.com"});
+		this.$.browser.call({"target": "mailto:jakuje@gmail.com?subject=[WebOTP]"});
 	},
 	goBack: function() {
 		this.doBack();
