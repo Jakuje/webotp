@@ -16,9 +16,9 @@ enyo.kind({
 				{kind: "Image", src: "images/browser.png", style: "width:50%;margin: -7px 0;"},
 				{content: "Support"},
 			]},
-			{kind: "HFlexBox", onclick: "showNations", components: [
+			{kind: "HFlexBox", onclick: "showNation", components: [
 				{kind: "Image", src: "images/browser.png", style: "width:50%;margin: -7px 0;"},
-				{content: "WebOS Nations"},
+				{content: "WebOS Nation"},
 			]},
 			{kind: "HFlexBox", onclick: "showForums", components: [
 				{kind: "Image", src: "images/browser.png", style: "width:50%;margin: -7px 0;"},
@@ -37,7 +37,7 @@ enyo.kind({
 	showWeb: function() {
 		this.$.browser.call({"target": "http://jakuje.dta3.com/webotp.phtml"});
 	},
-	showNations: function(){
+	showNation: function(){
 		this.$.browser.call({"target": "http://www.webosnation.com/webotp"});
 	},
 	showForums: function(){
