@@ -1,6 +1,9 @@
 enyo.kind({
 	kind: enyo.Component,
 	name: "WebOTP.Crypto",
+	events: {
+		"onStore": "",
+	},
 	service: null,
 	getPIN: function(service){
 		this.service = service;
