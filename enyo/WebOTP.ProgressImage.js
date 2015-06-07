@@ -76,11 +76,11 @@ enyo.kind({
 	},
 	updateInnerProgress: function(inIndex, remaining) {
 		this.innerProgress[inIndex] = (this.innerInitial[inIndex] - remaining) / this.innerInitial[inIndex];
-		//this.draw();
+		this.draw(inIndex);
 	},
 	updateOuterProgress: function(inIndex, remaining) {
 		this.outerProgress[inIndex] = (this.outerInitial[inIndex] - remaining) / this.outerInitial[inIndex];
-		this.draw(inIndex);
+		//this.draw(inIndex);
 	},
 	setInnerStart: function(inIndex, innerInitial) {
 		this.innerInitial[inIndex] = innerInitial;
@@ -88,8 +88,10 @@ enyo.kind({
 	draw: function(inIndex){
 		this.inIndex = inIndex;
 		this.clearCanvas();
-		this.drawCircle('#555555', null, this.radius, this.outerProgress[inIndex]);
-		this.drawCircle(null, '#555555', this.radius - 5, this.innerProgress[inIndex]);
+		if (this.outerInitial[inIndex] != 0)
+			this.drawCircle('#555555', null, this.radius, this.outerProgress[inIndex]);
+		if (this.innerInitial[inIndex] != 0)
+			this.drawCircle(null, '#555555', this.radius - 5, this.innerProgress[inIndex]);
 	},
 	destroyProgress: function(inIndex) {
 		this.ctx[inIndex].clearRect(-this.size, -this.size, 2*this.size, 2*this.size);

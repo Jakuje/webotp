@@ -72,19 +72,25 @@ enyo.kind({
 		//var inIndex = inEvent.rowIndex;
 		var inIndex = this.$.list.fetchRowIndexByNode(inEvent.toElement);
 		var service = this.services[inIndex];
-		var swap_timeout = service.interval - (Math.floor(new Date().getTime() / 1000) % service.interval);
-		var timeout = parseInt(service.interval)+swap_timeout;
+		var timeout;
 
 		/* make sure the init goes with correct row! */
 		this.$.list.controlsToRow(inIndex);
-		this.$.icon.initProgress(inIndex, swap_timeout, timeout);
 
 		this.showNewPin(inIndex);
-		if (service.type == 0){
+		if (service.type == 0) {
+			var swap_timeout = service.interval - (Math.floor(new Date().getTime() / 1000) % service.interval);
+			timeout = parseInt(service.interval)+swap_timeout;
+			this.$.icon.initProgress(inIndex, swap_timeout, timeout);
+			this.$.timer.start(inIndex, timeout, enyo.bind(this, "hidePin"));
+			// do puter circle first, since the inner triggers redraw
 			this.$.pinTimer.start(inIndex, swap_timeout, enyo.bind(this, "showSecondPin"));
-			// do inner circle first, since the outer triggers redraw
+		} else {
+			timeout = parseInt(service.interval);
+			this.$.icon.initProgress(inIndex, timeout, 0);
+			// counter has only inner circle
+			this.$.pinTimer.start(inIndex, timeout, enyo.bind(this, "hidePin"));
 		}
-		this.$.timer.start(inIndex, timeout, enyo.bind(this, "hidePin"));
 		inEvent.stopPropagation();
 	},
 	updateProgress: function(inSender, inRemains, inIndex) {
