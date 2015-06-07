@@ -12,9 +12,9 @@ enyo.kind({
 			var counter = Math.floor(time);
 			return this.getHOTPbase32(service.algorithm, service.digits, service.secret, counter);
 		} else { // HOTP
-			service.counter++;
+			var token = this.getHOTPbase32(service.algorithm, service.digits, service.secret, service.counter++);
 			this.doStore();
-			return this.getHOTPbase32(service.algorithm, service.digits, service.secret, service.counter);
+			return token;
 		}
 	},
 	getAlgorithm: function(algorithm){
@@ -69,26 +69,37 @@ enyo.kind({
 		var testTime = [59, 1111111109, 1111111111, 1234567890, 2000000000, 20000000000];
 		var X = 30;
 		var T0 = 0;
-		console.log("+---------------+-----------------------+" +
+		console.log("+---------------+---------------------------------+" +
 			"------------------+--------+--------+");
-		console.log("|  Time(sec)    |   Time (UTC format)   " +
+		console.log("|  Time(sec)    |        Time (UTC format)        " +
 			"| Value of T(Hex)  |  TOTP  | Mode   |");
-		console.log("+---------------+-----------------------+" +
+		console.log("+---------------+---------------------------------+" +
 			"------------------+--------+--------+");
 		for (var i = 0; i < testTime.length; i++) {
 			var T = Math.floor((testTime[i] - T0)/X);
 			var steps = leftpad(dec2hex(T), 16, 0);
 			var utcTime = new Date(testTime[i]*1000).toUTCString();
-			var fmtTime = leftpad(testTime[i], 16, ' ');
-			console.log("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " | " 
+			var fmtTime = leftpad(String(testTime[i]), 11, ' ');
+			console.log("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" 
 			+ this.getHOTP("SHA1", 8, seed, T) + "| SHA1   |");
-			console.log("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " | "
+			console.log("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |"
 			+ this.getHOTP("SHA256", 8, seed32, T) + "| SHA256 |");
-			console.log("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " | "
+			console.log("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |"
 			+ this.getHOTP("SHA512", 8, seed64, T) + "| SHA512 |");
-			console.log("+---------------+-----------------------+" +
+			console.log("+---------------+---------------------------------+" +
 			"------------------+--------+--------+");
 		}
+
+		// own test of HOTP counting from 0
+		var secret = "ABCDEFGH"
+		console.log("+---------+--------+--------+");
+		console.log("| Counter |  HOTP  | Mode   |");
+		console.log("+---------+--------+--------+");
+		for (var i = 0; i <= 20; i++){
+			console.log("|  " + leftpad(String(i), 5, " ") + "  |"
+			+ this.getHOTPbase32("SHA1", 8, secret, i) + "| SHA1   |");
+		}
+		console.log("+---------+--------+--------+");
 	},
 	validateBase32: function(value) {
 		var base32chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
