@@ -17,7 +17,7 @@ enyo.kind({
 	},
 	components: [
 		{kind: "WebOTP.Crypto", name: "crypto"},
-		{kind: "RowGroup", caption: "Identification", components: [
+		{kind: "RowGroup", name: "title", caption: "Identification", components: [
 			{kind: enyo.HFlexBox, components: [
           			{kind: "WebOTP.ProgressImage", name: "icon", src: "images/80.png"},
 				{kind: enyo.VFlexBox, flex: 1, components: [
@@ -64,7 +64,7 @@ enyo.kind({
 			]}
 		]},
 		{kind: enyo.HFlexBox, components: [
-			{kind: "Button", className: "enyo-button", caption: "Back", flex: 1, onclick: "goBack"},
+			{kind: "Button", className: "enyo-button", name: "back", caption: "Back", flex: 1, onclick: "goBack"},
 			{kind: "Button", className: "enyo-button-affirmative", caption: "Add", disabled: true, flex:1, name: "submit", onclick: "addToken"},
 		]}
 	],
@@ -126,6 +126,8 @@ enyo.kind({
 		this.$.advanced.show();
 		this.$.submit.setCaption("Add");
 		this.$.submit.onclick = "addToken";
+		this.$.back.setCaption("Back");
+		this.$.title.setCaption("New token");
 		this.validate();
 	},
 	edit: function(inServiceId) {
@@ -138,6 +140,8 @@ enyo.kind({
 		this.$.advanced.hide();
 		this.$.submit.setCaption("Edit");
 		this.$.submit.onclick = "editToken";
+		this.$.back.setCaption("Cancel");
+		this.$.title.setCaption("Edit token");
 		this.validate();
 	},
 	cleanup: function() {
